@@ -54,6 +54,13 @@ public class BrokerStartup {
         start(createBrokerController(args));
     }
 
+    /**
+     * 初始化 BrokerController
+     *
+     * @Date 2022/11/24 17:57
+     * @param controller
+     * @return org.apache.rocketmq.broker.BrokerController
+     **/
     public static BrokerController start(BrokerController controller) {
         try {
 
@@ -83,6 +90,11 @@ public class BrokerStartup {
         }
     }
 
+    /**
+     * 实例化BrokerController
+     * @param args
+     * @return
+     */
     public static BrokerController createBrokerController(String[] args) {
         System.setProperty(RemotingCommand.REMOTING_VERSION_KEY, Integer.toString(MQVersion.CURRENT_VERSION));
 
@@ -205,7 +217,7 @@ public class BrokerStartup {
             MixAll.printObjectProperties(log, messageStoreConfig);
 
             brokerConfig.setInBrokerContainer(false);
-
+            // 实例化BrokerController
             final BrokerController controller = new BrokerController(
                 brokerConfig,
                 nettyServerConfig,

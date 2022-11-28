@@ -109,6 +109,8 @@ public class DefaultMQProducer extends ClientConfig implements MQProducer {
      * Maximum number of retry to perform internally before claiming sending failure in synchronous mode. </p>
      *
      * This may potentially cause message duplication which is up to application developers to resolve.
+     *
+     * 同步发送模式下发送失败重试次数，可能造成重复消息，由应用开发人员解决
      */
     private int retryTimesWhenSendFailed = 2;
 
@@ -295,8 +297,11 @@ public class DefaultMQProducer extends ClientConfig implements MQProducer {
      */
     @Override
     public void start() throws MQClientException {
+        // 对producerGroup再次封装，用于在不同业务场景下做隔离
         this.setProducerGroup(withNamespace(this.producerGroup));
+        // 核心方法
         this.defaultMQProducerImpl.start();
+        // 消息追踪
         if (null != traceDispatcher) {
             try {
                 traceDispatcher.start(this.getNamesrvAddr(), this.getAccessChannel());

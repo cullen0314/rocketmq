@@ -26,6 +26,7 @@ import org.apache.rocketmq.remoting.protocol.route.TopicRouteData;
 public class TopicPublishInfo {
     private boolean orderTopic = false;
     private boolean haveTopicRouterInfo = false;
+    // topic下所有的队列列表
     private List<MessageQueue> messageQueueList = new ArrayList<>();
     private volatile ThreadLocalIndex sendWhichQueue = new ThreadLocalIndex();
     private TopicRouteData topicRouteData;
@@ -66,7 +67,8 @@ public class TopicPublishInfo {
         this.haveTopicRouterInfo = haveTopicRouterInfo;
     }
 
-    public MessageQueue selectOneMessageQueue(final String lastBrokerName) {
+
+    public MessageQueue selectOneMessageQueue(final String lastBrokerName) { // 代表上次选择的 MessageQueue 所在的 Broker，并且它只会在第一次投递失败之后的后续重试流程中有值。
         if (lastBrokerName == null) {
             return selectOneMessageQueue();
         } else {
